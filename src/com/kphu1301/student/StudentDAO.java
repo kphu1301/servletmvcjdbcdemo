@@ -3,7 +3,7 @@ package com.kphu1301.student;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +25,10 @@ public class StudentDAO {
 		try {
 		
 			conn = dataSource.getConnection();
-		
-			Statement sql = conn.createStatement();
+			String sql = "SELECT * FROM student;";
+			PreparedStatement ps = conn.prepareStatement(sql);
 			
-			String query = "SELECT * FROM student;";
-			ResultSet rs = sql.executeQuery(query);
+			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
 				int id = rs.getInt("id");
@@ -58,20 +57,21 @@ public class StudentDAO {
 		return students;
 	}
 
-	public boolean addStudent(String firstName, String lastName, String email) {
+	public void addStudent(String firstName, String lastName, String email) {
 		
 		Connection conn = null;
-		boolean result = false;
 		
 		try {
 			conn = dataSource.getConnection();
-			Statement sql = conn.createStatement();
-			String query = "INSERT INTO student "
-					+ "(first_name, last_name, email) VALUES ('"
-					+ firstName + "','" + lastName + "','" + email + "');";
-			sql.execute(query);
+			String sql = "INSERT INTO student (first_name, last_name, email) "
+					+ "VALUES (?, ? ,?);";
 			
-			result = true;
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, firstName);
+			ps.setString(2, lastName);
+			ps.setString(3, email);
+			
+			ps.executeUpdate();
 		}
 		
 		catch (Exception e) {
@@ -87,7 +87,6 @@ public class StudentDAO {
 				}
 			}
 		}
-		return result;
 	}
 
 	public void updateStudent(int id, String firstName, String lastName, String email) {
@@ -96,13 +95,14 @@ public class StudentDAO {
 		
 		try {
 			conn = dataSource.getConnection();
-			Statement sql = conn.createStatement();
-			String query = "UPDATE student SET "
-					+	"first_name = '" + firstName + "', last_name = '" 
-					+ lastName + "', email = '" + email + "'"
-					+ "WHERE id = " + id + ";";
-			
-			sql.execute(query);
+			String sql = "UPDATE student SET first_name = ?, last_name = ?, email = ?"
+					+ " WHERE id = ?;";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, firstName);
+			ps.setString(2, lastName);
+			ps.setString(3, email);
+			ps.setInt(4, id);
+			ps.executeUpdate();
 			
 		}
 		catch (Exception e) {
@@ -125,10 +125,11 @@ public class StudentDAO {
 		
 		try {
 			conn = dataSource.getConnection();
-			Statement sql = conn.createStatement();
-			String query = "DELETE FROM student WHERE id=" + id + ";";
+			String sql = "DELETE FROM student WHERE id = ?;";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			ps.executeUpdate();
 			
-			sql.execute(query);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -16,8 +16,8 @@ public class StudentService {
 		return studentDAO.getStudents();
 	}
 	
-	public boolean addStudent(String firstName, String lastName, String email) {
-		return studentDAO.addStudent(firstName, lastName, email);
+	public void addStudent(String firstName, String lastName, String email) {
+		studentDAO.addStudent(firstName, lastName, email);
 	}
 
 	public void updateStudent(int id, String firstName, String lastName, String email) {
