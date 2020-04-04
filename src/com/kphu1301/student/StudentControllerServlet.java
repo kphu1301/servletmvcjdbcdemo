@@ -43,13 +43,8 @@ public class StudentControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	try {
-			listStudents(request, response);
-		}
-		catch (Exception e) {
-			throw new ServletException(e);
-		}
-    	
+    	doPost(request, response);
+   
     }
 
 	@Override
@@ -61,49 +56,63 @@ public class StudentControllerServlet extends HttpServlet {
 			command = "LIST";
 		}
 		
-		switch (command) {
-		
-		case "LIST":
-			try {
+		try {
+			switch (command) {
+			
+			case "LIST":
 				listStudents(request, response);
+				break;
+	
+			case "ADD":
+				addStudent(request, response);
+				break;
+				
+			case "EDIT":
+				editStudent(request, response);
+				break;
+				
+			case "DELETE":
+				deleteStudent(request, response);
+				break;
+			default:
+				break;
 			}
-			catch (Exception e) {
-				throw new ServletException(e);
-			}
-			break;
-
-		case "ADD":
-			String firstName = request.getParameter("first-name");
-			String lastName = request.getParameter("last-name");
-			String email = request.getParameter("email");
-			
-			studentService.addStudent(firstName, lastName, email);
-			response.sendRedirect("StudentControllerServlet");
-			break;
-			
-		case "EDIT":
-			int id = Integer.parseInt(request.getParameter("student-id"));
-			firstName = request.getParameter("first-name");
-			lastName = request.getParameter("last-name");
-			email = request.getParameter("email");
-			
-			studentService.updateStudent(id, firstName, lastName, email);
-			response.sendRedirect("StudentControllerServlet");
-			break;
-			
-		case "DELETE":
-			id = Integer.parseInt(request.getParameter("student-id"));
-
-			studentService.deleteStudent(id);
-			response.sendRedirect("StudentControllerServlet");
-			break;
-		default:
-			break;
 		}
-		
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 			
 	}
+
+
+	private void deleteStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		int id = Integer.parseInt(request.getParameter("student-id"));
+		studentService.deleteStudent(id);
+		listStudents(request, response);
+	}
+
+
+	private void editStudent(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		int id = Integer.parseInt(request.getParameter("student-id"));
+		String firstName = request.getParameter("first-name");
+		String lastName = request.getParameter("last-name");
+		String email = request.getParameter("email");
+		
+		studentService.updateStudent(id, firstName, lastName, email);
+		listStudents(request, response);
+	}
 	
+	private void addStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		String firstName = request.getParameter("first-name");
+		String lastName = request.getParameter("last-name");
+		String email = request.getParameter("email");
+		
+		studentService.addStudent(firstName, lastName, email);
+		response.sendRedirect("StudentControllerServlet");
+	}
+
+
 	private void listStudents(HttpServletRequest request, HttpServletResponse response) throws Exception {	
 		//get students
 		List<Student> students = studentService.getStudents();
