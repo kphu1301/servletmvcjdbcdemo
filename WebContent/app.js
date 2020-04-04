@@ -10,7 +10,7 @@ const deleteBtn = document.getElementById("delete-btn");
 const formTitle = document.getElementById("form-title");
 const studentIDEl = document.getElementById("student-id");
 const formEl = document.querySelector(".student-form");
-
+const command = document.getElementById("command");
 
 
 function showAddForm(e){
@@ -28,7 +28,7 @@ function showAddForm(e){
 	studentIDEl.value = "";
 	
 	submitBtn.value = "Add";
-	formEl.setAttribute("action", "StudentAddControllerServlet");
+	command.value = "ADD";
 }
 
 function showEditForm(e){
@@ -47,7 +47,7 @@ function showEditForm(e){
 	emailEl.value = userInfo[3].innerText;
 	
 	submitBtn.value = "Edit";
-	formEl.setAttribute("action", "StudentEditControllerServlet");
+	command.value = "EDIT";
 }
 
 
@@ -66,7 +66,7 @@ function showDeleteForm(e){
 	emailEl.setAttribute("disabled", "true");
 	
 	submitBtn.value = "Delete";
-	formEl.setAttribute("action", "StudentDeleteControllerServlet");
+	command.value = "DELETE";
 }
 
 function toggleForm(){

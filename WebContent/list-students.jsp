@@ -164,7 +164,7 @@
 		<span class="col header">ID</span>
 			<span class="col header">First Name</span>
 			<span class="col header">Last Name</span>
-			<span class="col header">Email</span>
+			<span class="col header">Email</span>ff
 			<span class="col header">Action</span>
 		</div>
 		<c:forEach var="student" items="${student_list}" >
@@ -181,7 +181,7 @@
 		</c:forEach>
 	</div>
 	<div class="form-container hidden">
-		<form class="student-form" action="StudentAddControllerServlet" method="post">
+		<form class="student-form" action="StudentControllerServlet" method="post">
 			<h3 id="form-title">Add Student</h3>
 			<input type="hidden" name="student-id" id="student-id">
 			<div class="form-input">
@@ -196,6 +196,7 @@
 				<label for="email">Email:</label>
 				<input class="form-input" name="email" id="email" type="email" placeholder="Enter Email">
 			</div>
+			<input type="hidden" name="command" id="command" value="LIST">
 			<div class="form-input ">
 				<input class="btn" id="submit-btn" type="submit" value="Submit">
 				<button class="btn" id="cancel-btn" type="button">Cancel</button>
